@@ -35,11 +35,8 @@ public class FakeRoomRepository implements RoomRepository {
     }
 
     @Override
-    public void removeByName(String name) {
-        database.entrySet().stream()
-            .filter(entry -> entry.getValue().equals(name))
-            .findAny()
-            .ifPresent(entry -> database.remove(entry.getKey()));
+    public void deleteById(int id) {
+        database.remove(id);
     }
 
     @Override

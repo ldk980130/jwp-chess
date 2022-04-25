@@ -35,17 +35,18 @@ class BoardControllerTest {
 	@Autowired
 	private GameService gameService;
 	private int boardId;
+	private int roomId;
 
 	@BeforeEach
 	void setUp() {
 		RestAssured.port = port;
-		int roomId = (int) roomService.create(testName).getId();
+		roomId = (int) roomService.create(testName).getId();
 		boardId = gameService.startNewGame(roomId).getBoardId();
 	}
 
 	@AfterEach
 	void deleteCreated() {
-		roomService.deleteByName(testName);
+		roomService.removeById(roomId);
 	}
 
 	@Test

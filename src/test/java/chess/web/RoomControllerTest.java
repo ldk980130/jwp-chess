@@ -46,7 +46,8 @@ class RoomControllerTest {
 
     @AfterEach
     void deleteCreated() {
-        roomService.deleteByName(testName);
+        roomService.findAll()
+                .forEach(room -> roomService.removeById((int) room.getId()));
     }
 
     @DisplayName("유효한 이름을 받으면 게임방 입장")
@@ -105,5 +106,16 @@ class RoomControllerTest {
             .when().get("/rooms/" + roomId + "/load")
             .then().log().all()
             .statusCode(HttpStatus.OK.value());
+    }
+
+    @Test
+    @DisplayName("방을 삭제한다.")
+    void deleteRoom() {
+        RoomDto room = roomService.create(testName);
+
+        RestAssured.given().log().all()
+            .when().delete("/rooms/" + room.getId())
+            .then().log().all()
+            .header("location", containsString("/"));
     }
 }

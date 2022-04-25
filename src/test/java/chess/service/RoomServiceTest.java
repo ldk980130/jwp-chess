@@ -21,11 +21,12 @@ class RoomServiceTest {
 	@Autowired
 	private RoomService roomService;
 
-	private String testName = "summer";
+	private final String testName = "summer";
 
 	@AfterEach
 	void deleteCreated() {
-		roomService.deleteByName(testName);
+		roomService.findAll()
+				.forEach(room -> roomService.removeById((int) room.getId()));
 	}
 
 	@Test

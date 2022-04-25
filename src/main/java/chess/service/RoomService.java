@@ -52,8 +52,8 @@ public class RoomService {
 	}
 
 	@Transactional
-	public void deleteByName(String name) {
-		roomRepository.removeByName(name);
+	public void removeById(int id) {
+		roomRepository.deleteById(id);
 	}
 
 	public List<RoomDto> findAll() {

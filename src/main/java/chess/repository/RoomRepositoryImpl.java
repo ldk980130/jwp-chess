@@ -67,9 +67,9 @@ public class RoomRepositoryImpl implements RoomRepository {
     }
 
     @Override
-    public void removeByName(String name) {
-        String sql = "delete from room where name = :name";
-        jdbcTemplate.update(sql, Map.of("name", name));
+    public void deleteById(int id) {
+        String sql = "delete from room where id = :id";
+        jdbcTemplate.update(sql, Map.of("id", id));
     }
 
     @Override

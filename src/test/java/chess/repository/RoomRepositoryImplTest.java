@@ -46,8 +46,8 @@ public class RoomRepositoryImplTest {
     @Test
     @DisplayName("이름으로 생성된 방을 삭제한다.")
     void removeByName() {
-        roomRepository.save(testName);
-        roomRepository.removeByName(testName);
+        int id = roomRepository.save(testName);
+        roomRepository.deleteById(id);
 
         assertThat(roomRepository.find(testName)).isEmpty();
     }

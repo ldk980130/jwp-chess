@@ -43,14 +43,32 @@
         })
             .then(res => res.json())
             .then(res => {
-                var roomContainer = document.getElementById("roomNames");
-                for (var i = 0; i < res.length; i++) {
-                    var link = document.createElement("a");
+                let roomContainer = document.getElementById("roomNames");
+                roomContainer.innerHTML = "";
+                for (let i = 0; i < res.length; i++) {
+                    let button = document.createElement("button");
+                    button.innerHTML = '삭제';
+                    button.onclick = function () {
+                        fetchDeleteRoom(res[i].id)
+                    };
+                    roomContainer.appendChild(button);
+
+                    let link = document.createElement("a");
                     link.innerHTML = res[i].name + '<br>';
                     link.href = 'http://localhost:8080/rooms/' + res[i].id;
                     roomContainer.appendChild(link);
                 }
             });
+    }
+
+    function fetchDeleteRoom(roomId) {
+        fetch("http://localhost:8080/rooms/" + roomId, {
+            method: 'DELETE',
+            headers: {
+                'Content-type': 'application/json; charset=UTF-8',
+            },
+        })
+            .then(res => alert("방이 삭제되었습니다."))
     }
 </script>
 

@@ -8,6 +8,7 @@ import chess.web.dto.BoardDto;
 import chess.web.dto.RoomDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -42,6 +43,12 @@ public class RoomController {
     public String board(@PathVariable int roomId) {
         roomService.validateId(roomId);
         return "/board.html";
+    }
+
+    @DeleteMapping("/{roomId}")
+    public String deleteRoom(@PathVariable int roomId) {
+        roomService.removeById(roomId);
+        return "redirect:/";
     }
 
     @GetMapping("/{roomId}/start")

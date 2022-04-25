@@ -36,7 +36,7 @@ class GameServiceTest {
 
 	@AfterEach
 	void clear() {
-		roomService.deleteByName(testName);
+		roomService.removeById(roomId);
 	}
 
 	@Test
