@@ -1,10 +1,15 @@
 package chess.repository;
 
 import chess.web.dto.RoomDto;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import javax.sql.DataSource;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
@@ -65,5 +70,15 @@ public class RoomRepositoryImpl implements RoomRepository {
     public void removeByName(String name) {
         String sql = "delete from room where name = :name";
         jdbcTemplate.update(sql, Map.of("name", name));
+    }
+
+    @Override
+    public List<RoomDto> findAll() {
+        String sql = "select * from room";
+        return jdbcTemplate.query(sql, getRoomDtoMapper());
+    }
+
+    private RowMapper<RoomDto> getRoomDtoMapper() {
+        return (rs, rowNum) -> new RoomDto(rs.getInt(1), rs.getString(2));
     }
 }

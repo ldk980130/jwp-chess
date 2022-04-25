@@ -3,6 +3,7 @@ package chess.service;
 import chess.repository.RoomRepository;
 import chess.web.dto.RoomDto;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -53,5 +54,9 @@ public class RoomService {
 	@Transactional
 	public void deleteByName(String name) {
 		roomRepository.removeByName(name);
+	}
+
+	public List<RoomDto> findAll() {
+		return roomRepository.findAll();
 	}
 }

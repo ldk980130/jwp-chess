@@ -1,5 +1,7 @@
 package chess.web;
 
+import java.util.List;
+
 import chess.service.GameService;
 import chess.service.RoomService;
 import chess.web.dto.BoardDto;
@@ -22,6 +24,12 @@ public class RoomController {
     public RoomController(RoomService roomService, GameService gameService) {
         this.roomService = roomService;
         this.gameService = gameService;
+    }
+
+    @GetMapping
+    public ResponseEntity<List<RoomDto>> loadRooms() {
+        List<RoomDto> rooms = roomService.findAll();
+        return ResponseEntity.ok(rooms);
     }
 
     @PostMapping

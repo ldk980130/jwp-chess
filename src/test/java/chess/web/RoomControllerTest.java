@@ -1,5 +1,6 @@
 package chess.web;
 
+import static org.hamcrest.core.Is.*;
 import static org.hamcrest.core.StringContains.*;
 
 import org.junit.jupiter.api.AfterEach;
@@ -26,6 +27,7 @@ import io.restassured.RestAssured;
 class RoomControllerTest {
 
     private static final String testName = "summer";
+
     @LocalServerPort
     private int port;
 
@@ -59,11 +61,22 @@ class RoomControllerTest {
             .header("Location", containsString("/rooms/"));
     }
 
+    @Test
+    @DisplayName("방 목록을 불러온다.")
+    void loadRooms() {
+        roomService.create(testName);
+        roomService.create("does");
+        RestAssured.given().log().all()
+            .when().get("/rooms")
+            .then().log().all()
+            .statusCode(HttpStatus.OK.value())
+            .body("size()", is(2));
+    }
+
     @DisplayName("부적절한 이름이 입력되면 400 에러 발생")
     @ParameterizedTest
     @ValueSource(strings = {"", "16자를넘는방이름은안되니까돌아가"})
     void nameException(String name) {
-
         RestAssured.given().log().all()
             .formParam("name", name)
             .when().post("/rooms")

@@ -3,8 +3,10 @@ package chess.configuration;
 import chess.repository.RoomRepository;
 import chess.web.dto.RoomDto;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class FakeRoomRepository implements RoomRepository {
 
@@ -38,5 +40,12 @@ public class FakeRoomRepository implements RoomRepository {
             .filter(entry -> entry.getValue().equals(name))
             .findAny()
             .ifPresent(entry -> database.remove(entry.getKey()));
+    }
+
+    @Override
+    public List<RoomDto> findAll() {
+        return database.entrySet().stream()
+            .map(entry -> new RoomDto(entry.getKey(), entry.getValue()))
+            .collect(Collectors.toList());
     }
 }

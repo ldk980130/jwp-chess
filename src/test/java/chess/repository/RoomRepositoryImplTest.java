@@ -2,6 +2,8 @@ package chess.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.List;
+
 import chess.web.dto.RoomDto;
 import javax.sql.DataSource;
 import org.junit.jupiter.api.BeforeEach;
@@ -48,5 +50,15 @@ public class RoomRepositoryImplTest {
         roomRepository.removeByName(testName);
 
         assertThat(roomRepository.find(testName)).isEmpty();
+    }
+
+    @Test
+    @DisplayName("저장된 전체 방을 찾아온다.")
+    void findAll() {
+        roomRepository.save(testName);
+        roomRepository.save("does");
+
+        List<RoomDto> rooms = roomRepository.findAll();
+        assertThat(rooms.size()).isEqualTo(2);
     }
 }
