@@ -14,6 +14,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 @JdbcTest
 public class RoomRepositoryImplTest {
 
+    private static final String testName = "summer";
     @Autowired
     private NamedParameterJdbcTemplate jdbcTemplate;
     @Autowired
@@ -28,15 +29,24 @@ public class RoomRepositoryImplTest {
     @Test
     @DisplayName("뱡 insert")
     void insert() {
-        int id = roomRepository.save("summer");
+        int id = roomRepository.save(testName);
         assertThat(id).isGreaterThan(0);
     }
 
     @Test
     @DisplayName("방 find")
     void find() {
-        roomRepository.save("pobi");
-        RoomDto room = roomRepository.find("pobi").orElseThrow();
-        assertThat(room.getName()).isEqualTo("pobi");
+        roomRepository.save(testName);
+        RoomDto room = roomRepository.find(testName).orElseThrow();
+        assertThat(room.getName()).isEqualTo(testName);
+    }
+
+    @Test
+    @DisplayName("이름으로 생성된 방을 삭제한다.")
+    void removeByName() {
+        roomRepository.save(testName);
+        roomRepository.removeByName(testName);
+
+        assertThat(roomRepository.find(testName)).isEmpty();
     }
 }

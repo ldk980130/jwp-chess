@@ -60,4 +60,10 @@ public class RoomRepositoryImpl implements RoomRepository {
             return Optional.empty();
         }
     }
+
+    @Override
+    public void removeByName(String name) {
+        String sql = "delete from room where name = :name";
+        jdbcTemplate.update(sql, Map.of("name", name));
+    }
 }

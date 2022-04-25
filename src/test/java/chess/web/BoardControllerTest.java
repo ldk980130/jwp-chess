@@ -1,5 +1,6 @@
 package chess.web;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,6 +22,8 @@ import io.restassured.http.ContentType;
 @Import(RepositoryConfiguration.class)
 class BoardControllerTest {
 
+	private static final String testName = "summer";
+
 	@LocalServerPort
 	private int port;
 
@@ -36,8 +39,13 @@ class BoardControllerTest {
 	@BeforeEach
 	void setUp() {
 		RestAssured.port = port;
-		int roomId = (int) roomService.create("summer").getId();
+		int roomId = (int) roomService.create(testName).getId();
 		boardId = gameService.startNewGame(roomId).getBoardId();
+	}
+
+	@AfterEach
+	void deleteCreated() {
+		roomService.deleteByName(testName);
 	}
 
 	@Test

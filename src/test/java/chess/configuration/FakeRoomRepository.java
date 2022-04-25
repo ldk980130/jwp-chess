@@ -31,4 +31,12 @@ public class FakeRoomRepository implements RoomRepository {
         return Optional.ofNullable(database.get(roomId))
                 .map(name -> new RoomDto(roomId, name));
     }
+
+    @Override
+    public void removeByName(String name) {
+        database.entrySet().stream()
+            .filter(entry -> entry.getValue().equals(name))
+            .findAny()
+            .ifPresent(entry -> database.remove(entry.getKey()));
+    }
 }

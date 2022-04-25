@@ -2,6 +2,7 @@ package chess.web;
 
 import static org.hamcrest.core.StringContains.*;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,6 +25,7 @@ import io.restassured.RestAssured;
 @Import(RepositoryConfiguration.class)
 class RoomControllerTest {
 
+    private static final String testName = "summer";
     @LocalServerPort
     private int port;
 
@@ -40,13 +42,17 @@ class RoomControllerTest {
         RestAssured.port = port;
     }
 
+    @AfterEach
+    void deleteCreated() {
+        roomService.deleteByName(testName);
+    }
+
     @DisplayName("유효한 이름을 받으면 게임방 입장")
     @Test
     void createRoom() {
-        final String name = "summer";
 
         RestAssured.given().log().all()
-            .formParam("name", name)
+            .formParam("name", testName)
             .when().post("/rooms")
             .then().log().all()
             .statusCode(HttpStatus.FOUND.value())
@@ -68,7 +74,7 @@ class RoomControllerTest {
     @Test
     @DisplayName("새로운 게임을 시작하면 200 응답을 받는다.")
     void startNewGame() {
-        RoomDto room = roomService.create("summer");
+        RoomDto room = roomService.create(testName);
 
         RestAssured.given().log().all()
             .when().get("/rooms/" + room.getId() + "/start")
@@ -79,7 +85,7 @@ class RoomControllerTest {
     @Test
     @DisplayName("게임을 불러오면 200 응답을 받는다.")
     void loadGame() {
-        int roomId = (int) roomService.create("summer").getId();
+        int roomId = (int) roomService.create(testName).getId();
         gameService.startNewGame(roomId);
 
         RestAssured.given().log().all()

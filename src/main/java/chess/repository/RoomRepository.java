@@ -9,4 +9,6 @@ public interface RoomRepository {
     Optional<RoomDto> find(String name);
 
     Optional<RoomDto> findById(int roomId);
+
+    void removeByName(String name);
 }
